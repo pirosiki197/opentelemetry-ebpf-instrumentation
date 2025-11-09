@@ -40,7 +40,7 @@ func main() {
 		Level: &lvl,
 	})))
 
-	slog.Info("OpenTelemetry eBPF Instrumentation", "Version", buildinfo.Version, "Revision", buildinfo.Revision, "OpenTelemetry SDK Version", otelsdk.Version())
+	slog.Info("OpenTelemetry eBPF Instrumentation", "LogLevel", lvl.String(), "Version", buildinfo.Version, "Revision", buildinfo.Revision, "OpenTelemetry SDK Version", otelsdk.Version())
 
 	if err := obi.CheckOSSupport(); err != nil {
 		slog.Error("can't start OpenTelemetry eBPF Instrumentation", "error", err)
