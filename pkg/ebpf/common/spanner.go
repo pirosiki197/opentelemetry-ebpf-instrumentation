@@ -71,6 +71,7 @@ func SQLRequestTraceToSpan(trace *SQLRequestTrace) request.Span {
 	sql := cstr(trace.Sql[:])
 
 	method, path := sqlprune.SQLParseOperationAndTable(sql)
+	slog.Info("SQL Request", "method", method, "path", path, "sql", sql)
 
 	peer := ""
 	peerPort := 0
