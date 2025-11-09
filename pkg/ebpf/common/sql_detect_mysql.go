@@ -12,6 +12,10 @@ import (
 	"go.opentelemetry.io/obi/pkg/internal/sqlprune"
 )
 
+func init() {
+	slog.Info("helooooooo")
+}
+
 type mysqlPreparedStatementsKey struct {
 	connInfo BpfConnectionInfoT
 	stmtID   uint32
@@ -142,7 +146,7 @@ func handleMySQL(parseCtx *EBPFParseContext, event *TCPRequestInfo, requestBuffe
 			slog.Debug("MySQL EXECUTE command with unknown statement ID", "stmtID", stmtID)
 			return span, errFallback
 		} else {
-			slog.Debug("Found mysql stmt", "stmt", stmt)
+			slog.Info("Found mysql stmt", "stmt", stmt)
 		}
 		op, table = sqlprune.SQLParseOperationAndTable(stmt)
 	case "QUERY":
