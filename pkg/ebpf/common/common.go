@@ -238,6 +238,8 @@ func ReadBPFTraceAsSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, reco
 		return request.Span{}, true, errors.New("invalid ringbuffer record size")
 	}
 
+	slog.Info("Read BPF Trace")
+
 	eventType := record.RawSample[0]
 
 	switch eventType {

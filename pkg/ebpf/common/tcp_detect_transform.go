@@ -30,6 +30,7 @@ const (
 //
 //nolint:cyclop
 func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, record *ringbuf.Record, filter ServiceFilter) (request.Span, bool, error) {
+	slog.Info("Read TCP Request")
 	event, err := ReinterpretCast[TCPRequestInfo](record.RawSample)
 	if err != nil {
 		return request.Span{}, true, err
@@ -49,7 +50,7 @@ func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, 
 	// We might know already the protocol for this event
 	switch event.ProtocolType {
 	case ProtocolTypeMySQL:
-		slog.Info("mysql event")
+		slog.Info("Mysql Event")
 		span, err := handleMySQL(parseCtx, event, requestBuffer, responseBuffer)
 		if errors.Is(err, errFallback) {
 			slog.Debug("MySQL: falling back to generic handler")
@@ -65,6 +66,7 @@ func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, 
 
 		return span, false, nil
 	case ProtocolTypePostgres:
+		slog.Info("Postgres Event")
 		span, err := handlePostgres(parseCtx, event, requestBuffer, responseBuffer)
 		if errors.Is(err, errFallback) {
 			slog.Debug("Postgres: falling back to generic handler")
@@ -81,6 +83,8 @@ func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, 
 	case ProtocolTypeUnknown:
 	default:
 	}
+
+	slog.Info("Unknown TCP Request")
 
 	// Check if we have a SQL statement
 	op, table, sql, kind := detectSQLPayload(cfg.HeuristicSQLDetect, requestBuffer)
