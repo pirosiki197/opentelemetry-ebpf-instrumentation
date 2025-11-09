@@ -141,6 +141,8 @@ func handleMySQL(parseCtx *EBPFParseContext, event *TCPRequestInfo, requestBuffe
 		if !found {
 			slog.Debug("MySQL EXECUTE command with unknown statement ID", "stmtID", stmtID)
 			return span, errFallback
+		} else {
+			slog.Debug("Found mysql stmt", "stmt", stmt)
 		}
 		op, table = sqlprune.SQLParseOperationAndTable(stmt)
 	case "QUERY":
