@@ -244,12 +244,15 @@ func ReadBPFTraceAsSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, reco
 
 	switch eventType {
 	case EventTypeSQL:
+		slog.Info("SQL Event")
 		return ReadSQLRequestTraceAsSpan(record)
 	case EventTypeKHTTP:
+		slog.Info("HTTP Event")
 		return ReadHTTPInfoIntoSpan(parseCtx, record, filter)
 	case EventTypeKHTTP2:
 		return ReadHTTP2InfoIntoSpan(parseCtx, record, filter)
 	case EventTypeTCP:
+		slog.Info("TCP Event")
 		return ReadTCPRequestIntoSpan(parseCtx, cfg, record, filter)
 	case EventTypeGoSarama:
 		return ReadGoSaramaRequestIntoSpan(record)
