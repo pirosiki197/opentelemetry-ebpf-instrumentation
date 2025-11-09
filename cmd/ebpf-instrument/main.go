@@ -4,6 +4,7 @@
 package main
 
 import (
+	"cmp"
 	"context"
 	"encoding/json"
 	"flag"
@@ -27,8 +28,14 @@ import (
 )
 
 func main() {
+	logLevel := cmp.Or(os.Getenv("LOG_LEVEL"), "INFO")
 	lvl := slog.LevelVar{}
-	lvl.Set(slog.LevelInfo)
+	switch logLevel {
+	case "DEBUG":
+		lvl.Set(slog.LevelDebug)
+	case "INFO":
+		lvl.Set(slog.LevelInfo)
+	}
 	slog.SetDefault(slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
 		Level: &lvl,
 	})))
