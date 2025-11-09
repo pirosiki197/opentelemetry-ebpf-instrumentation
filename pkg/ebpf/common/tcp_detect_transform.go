@@ -49,6 +49,7 @@ func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, 
 	// We might know already the protocol for this event
 	switch event.ProtocolType {
 	case ProtocolTypeMySQL:
+		slog.Info("mysql event")
 		span, err := handleMySQL(parseCtx, event, requestBuffer, responseBuffer)
 		if errors.Is(err, errFallback) {
 			slog.Debug("MySQL: falling back to generic handler")
@@ -60,6 +61,7 @@ func ReadTCPRequestIntoSpan(parseCtx *EBPFParseContext, cfg *config.EBPFTracer, 
 		if err != nil {
 			return request.Span{}, true, fmt.Errorf("failed to handle MySQL event: %w", err)
 		}
+		slog.Info("mysql span", "span", span)
 
 		return span, false, nil
 	case ProtocolTypePostgres:
