@@ -211,6 +211,9 @@ func spanOTELGetters(name attr.Name) (attributes.Getter[*Span, attribute.KeyValu
 			if s.Type == EventTypeHTTPClient && s.SubType == HTTPSubtypeElasticsearch && s.Elasticsearch != nil {
 				return DBQueryText(s.Elasticsearch.DBQueryText)
 			}
+			if s.Type == EventTypeSQLClient {
+				return DBQueryText(s.Statement)
+			}
 			return DBQueryText("")
 		}
 	case attr.AWSRequestID:
